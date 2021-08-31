@@ -24,9 +24,8 @@ app.use(cors())
 io.on('connect', (socket) => {
     socket.on('usuario',({usuario})=>{
         addUsuario(usuario,socket)
-        const users = []
-        usuarios.map(({usuario})=>{
-            users.push(usuario)
+        const users = usuarios.map(({usuario})=>{
+            return usuario
         })
         io.emit('conectados',users)
         console.table(usuarios)
@@ -35,7 +34,7 @@ io.on('connect', (socket) => {
     socket.on('enviar',({usuario, destino, msg})=>{
         if(destino!==undefined){
             const socketDestino = destinoSocket(destino)
-            socketDestino.emit('recibir',{"usuario":usuario,"msg":msg})
+            socketDestino.emit('recibir',{"sender":usuario,"msg":msg})
         }
         console.log(`${usuario}:${msg} a ${destino}`)
     })
